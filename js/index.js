@@ -42,17 +42,47 @@ function getFeedHtml(){
     
 }
    
-function renderFeed(){
-    document.querySelector('#feed').innerHTML += getFeedHtml()
-}
-renderFeed()
 
 document.addEventListener('click', function(e){
-    if(e.target.dataset.comment){
-        console.log(e.target.dataset.comment)
-    } else if(e.target.dataset.like){
-        console.log(e.target.dataset.like)
+    if(e.target.dataset.like){
+        handleLikeClick(e.target.dataset.like)
     } else if(e.target.dataset.retweet){
-        console.log(e.target.dataset.retweet)
+        handleRetweetClick(e.target.dataset.retweet)
     }
 })
+
+
+function handleLikeClick(tweetId){
+    const targetTweetObj = tweetsData.filter(function(tweet){
+        return tweet.uuid === tweetId
+    })[0]
+    if (targetTweetObj.isLiked){
+        targetTweetObj.likes--
+    } else {
+        targetTweetObj.likes++
+    }
+    targetTweetObj.isLiked = !targetTweetObj.isLiked
+
+    renderFeed()
+}
+
+function handleRetweetClick(tweetId){
+    const targetTweetObj = tweetsData.filter(function(tweet){
+        return tweet.uuid === tweetId
+    })[0]
+    if (targetTweetObj.isRetweeted){
+        targetTweetObj.retweets--
+    } else {
+        targetTweetObj.retweets++
+    }
+    targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted
+
+    renderFeed()
+}
+
+
+
+function renderFeed(){
+    document.querySelector('#feed').innerHTML = getFeedHtml()
+}
+renderFeed()
