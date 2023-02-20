@@ -10,6 +10,40 @@ tweetBtn.addEventListener('click', function(){
 function getFeedHtml(){
     let feedHtml = ''
     tweetsData.forEach(function(data){
+
+        //like and retweet color switch
+        let likeIconClass = ''
+        if(data.isLiked){
+            likeIconClass='liked'
+        }
+        let shareIconClass = ''
+        if(data.isRetweeted){ 
+            shareIconClass='retweeted'
+        }
+        //like and retweet color switch
+
+        //replies
+        let repliesHtml = ''
+        if(data.replies.length > 0){
+            data.replies.forEach(function(replies){
+                repliesHtml += `
+        <div class="tweet-reply hidden">
+            <div class="tweet-inner">
+                    <img src="${replies.profilePic}" class="profile-pic">
+                <div>
+                    <p class="handle">${replies.handle}</p>
+                    <p class="tweet-text">${replies.tweetText}</p>
+                </div>
+            </div>
+        </div>
+                `
+            })
+            const hiddenReply = document.getElementsByClassName = '.hidden'
+            //start from here
+        }
+            
+        //replies
+
         feedHtml += `
         <div class="tweet">
             <div class="tweet-inner">
@@ -24,19 +58,23 @@ function getFeedHtml(){
                             ${data.replies.length}
                         </span>
                         <span class="tweet-detail">
-                            <i class="fa-solid fa-heart" 
+                            <i class="fa-solid fa-heart ${likeIconClass}" 
                             data-like="${data.uuid}"></i>
                             ${data.likes}
                         </span>
                         <span class="tweet-detail">
-                            <i class="fa-solid fa-retweet"
+                            <i class="fa-solid fa-retweet ${shareIconClass}"
                             data-retweet="${data.uuid}"></i>
                             ${data.retweets}
                         </span>
                     </div>   
                 </div>            
             </div>
-        </div>`
+        </div>
+    <div id="replies-${data.uuid}">
+        ${repliesHtml}
+    </div>   
+    `
     })
     return feedHtml
     
@@ -50,6 +88,7 @@ document.addEventListener('click', function(e){
         handleRetweetClick(e.target.dataset.retweet)
     }
 })
+
 
 
 function handleLikeClick(tweetId){
