@@ -1,11 +1,28 @@
 import { tweetsData } from "../js/data.js";
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+ 
 const tweetBtn = document.querySelector('#tweet-btn')
 const tweetInput = document.querySelector('#tweet-input')
 
 tweetBtn.addEventListener('click', function(){
-    console.log(tweetInput.value)
+    tweetsData.unshift({
+        handle: `@ValiBarosan`,
+        profilePic: `img/me.webp`,
+        likes: randomValue(),
+        retweets: randomValue(),
+        tweetText: `${tweetInput.value}`,
+        replies: [],
+        isLiked: false,
+        isRetweeted: false,
+        uuid: uuidv4(),
+    })
+    renderFeed()
     tweetInput.value = ''
 })
+
+function randomValue(){
+   return Math.floor(Math.random()*100)
+}
 
 function getFeedHtml(){
     let feedHtml = ''
@@ -27,7 +44,7 @@ function getFeedHtml(){
         if(data.replies.length > 0){
             data.replies.forEach(function(replies){
                 repliesHtml += `
-        <div class="tweet-reply hidden">
+        <div class="tweet-reply">
             <div class="tweet-inner">
                     <img src="${replies.profilePic}" class="profile-pic">
                 <div>
@@ -38,8 +55,7 @@ function getFeedHtml(){
         </div>
                 `
             })
-            const hiddenReply = document.getElementsByClassName = '.hidden'
-            //start from here
+           
         }
             
         //replies
@@ -71,7 +87,7 @@ function getFeedHtml(){
                 </div>            
             </div>
         </div>
-    <div id="replies-${data.uuid}">
+    <div class="hidden" id="replies-${data.uuid}">
         ${repliesHtml}
     </div>   
     `
@@ -86,6 +102,8 @@ document.addEventListener('click', function(e){
         handleLikeClick(e.target.dataset.like)
     } else if(e.target.dataset.retweet){
         handleRetweetClick(e.target.dataset.retweet)
+    }else if(e.target.dataset.comment){
+        handleCommetClick(e.target.dataset.comment)
     }
 })
 
@@ -118,7 +136,11 @@ function handleRetweetClick(tweetId){
 
     renderFeed()
 }
-
+//toggle the replies, easy to do but hard to remember 
+function handleCommetClick(replyId){
+    const replyBtn = document.querySelector(`#replies-${replyId}`)
+    replyBtn.classList.toggle('hidden')
+}
 
 
 function renderFeed(){
