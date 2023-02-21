@@ -17,11 +17,12 @@ tweetBtn.addEventListener('click', function(){
             isRetweeted: false,
             uuid: uuidv4(),
         })
+        
     } else{
         tweetInput.placeholder = 'Write something first.'
     }
-    renderFeed()
     tweetInput.value = ''
+    renderFeed()
 })
 
 function randomValue(){
