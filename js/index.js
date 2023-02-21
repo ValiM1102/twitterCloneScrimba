@@ -5,17 +5,19 @@ const tweetBtn = document.querySelector('#tweet-btn')
 const tweetInput = document.querySelector('#tweet-input')
 
 tweetBtn.addEventListener('click', function(){
-    tweetsData.unshift({
-        handle: `@ValiBarosan`,
-        profilePic: `img/me.webp`,
-        likes: randomValue(),
-        retweets: randomValue(),
-        tweetText: `${tweetInput.value}`,
-        replies: [],
-        isLiked: false,
-        isRetweeted: false,
-        uuid: uuidv4(),
-    })
+    if(tweetInput.value != ''){
+        tweetsData.unshift({
+            handle: `@ValiBarosan`,
+            profilePic: `img/me.webp`,
+            likes: randomValue(),
+            retweets: randomValue(),
+            tweetText: `${tweetInput.value}`,
+            replies: [],
+            isLiked: false,
+            isRetweeted: false,
+            uuid: uuidv4(),
+        })
+    }
     renderFeed()
     tweetInput.value = ''
 })
